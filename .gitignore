@@ -1,0 +1,15 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+
+# build outputs
+frontend/dist/
+dist/
+
+# wrangler
+.wrangler/
+.dev.vars*
+
+make_commits.js
