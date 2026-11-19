@@ -85,6 +85,10 @@ const SignatureTab = ({ request }) => {
           </button>
         </div>
 
+        <div className="sig-helper-note">
+          <span>Timing-Safe HMAC SHA-256 Engine: Enter any test secret to evaluate signature pass/fail in constant-time.</span>
+        </div>
+
         {error && <div className="sig-error-banner">{error}</div>}
       </form>
 

@@ -7,6 +7,7 @@
   border-bottom: 1px solid var(--border-subtle);
   gap: 12px;
   flex-wrap: wrap;
+  min-height: 48px;
 }
 
 .nav-left {
@@ -21,82 +22,149 @@
   gap: 8px;
   text-decoration: none;
   color: var(--text-primary);
+  transition: opacity 0.15s ease;
+}
+
+.nav-brand:hover {
+  opacity: 0.85;
 }
 
 .nav-brand-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--accent-primary);
+  background: #38bdf8;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
 }
 
 .nav-brand-title {
   font-family: var(--font-mono);
   font-weight: 700;
   font-size: 12px;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
 }
 
 .nav-divider {
-  color: var(--border-strong);
+  color: var(--text-muted);
   font-size: 14px;
 }
 
 .nav-bin-uuid {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-muted);
-  max-width: 140px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.socket-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 7px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  border-radius: 9999px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #34d399;
+}
+
+.live-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--success-color);
+  box-shadow: 0 0 6px var(--success-color);
+  animation: liveBlink 1.8s infinite;
+}
+
+@keyframes liveBlink {
+  0% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 0.4; transform: scale(0.9); }
 }
 
 .nav-center {
   flex: 1;
   display: flex;
   justify-content: center;
-  min-width: 260px;
+  min-width: 320px;
 }
 
-.endpoint-copy-pill {
+.endpoint-address-bar {
   display: flex;
   align-items: center;
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: 2px 4px 2px 8px;
-  cursor: pointer;
-  transition: border-color 0.15s ease;
-  max-width: 520px;
+  padding: 3px 4px 3px 8px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  max-width: 620px;
   width: 100%;
 }
 
-.endpoint-copy-pill:hover {
+.endpoint-address-bar:hover {
   border-color: var(--border-strong);
 }
 
-.pill-label {
-  font-size: 10px;
+.method-pill {
+  font-size: 9px;
   font-weight: 700;
-  color: var(--success-color);
-  margin-right: 6px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: var(--radius-sm);
+  padding: 2px 5px;
+  margin-right: 8px;
+  flex-shrink: 0;
 }
 
-.pill-url {
+.endpoint-url-text {
   flex: 1;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-secondary);
+  user-select: all;
 }
 
-.pill-copy-btn {
+.address-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.action-btn {
   background: var(--bg-hover);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
   font-size: 11px;
+  font-weight: 500;
   font-family: var(--font-ui);
   padding: 2px 8px;
   cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.action-btn:hover {
+  background: var(--bg-active);
+  border-color: var(--border-strong);
+  color: #ffffff;
+}
+
+.test-btn {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.28);
+}
+
+.test-btn:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: rgba(56, 189, 248, 0.5);
+  color: #ffffff;
 }
 
 .nav-right {
@@ -106,9 +174,9 @@
 }
 
 .btn-chaos-active {
-  background: var(--warning-subtle);
-  color: var(--warning-color);
-  border-color: var(--warning-border);
+  border-color: rgba(245, 158, 11, 0.5);
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
 }
 
 .chaos-pulse {
@@ -116,13 +184,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: var(--warning-color);
+  background-color: #f59e0b;
   margin-right: 4px;
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0% { transform: scale(0.9); opacity: 0.8; }
-  50% { transform: scale(1.3); opacity: 1; }
-  100% { transform: scale(0.9); opacity: 0.8; }
+  animation: liveBlink 1.5s infinite;
 }

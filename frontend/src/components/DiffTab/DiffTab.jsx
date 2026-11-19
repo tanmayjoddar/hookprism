@@ -63,6 +63,29 @@ const DiffTab = ({ request }) => {
           <button type="submit" className="btn btn-primary" disabled={loading}>
             {loading ? "Replaying Dual Targets..." : "Run Dual Replay & Diff"}
           </button>
+          <div className="diff-presets">
+            <span className="preset-label">Quick diff presets:</span>
+            <button
+              type="button"
+              className="preset-pill mono"
+              onClick={() => {
+                setTargetUrlA("https://httpbin.org/status/200");
+                setTargetUrlB("https://httpbin.org/status/201");
+              }}
+            >
+              200 OK vs 201 Created
+            </button>
+            <button
+              type="button"
+              className="preset-pill mono"
+              onClick={() => {
+                setTargetUrlA("https://httpbin.org/anything?env=prod");
+                setTargetUrlB("https://httpbin.org/anything?env=staging");
+              }}
+            >
+              Prod vs Staging
+            </button>
+          </div>
         </div>
 
         {error && <div className="diff-error-banner">{error}</div>}

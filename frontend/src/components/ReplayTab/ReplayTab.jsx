@@ -125,6 +125,24 @@ const ReplayTab = ({ request }) => {
           </button>
         </div>
 
+        <div className="target-url-presets">
+          <span className="preset-label">Quick test:</span>
+          <button
+            type="button"
+            className="preset-pill mono"
+            onClick={() => setTargetUrl("https://httpbin.org/post")}
+          >
+            https://httpbin.org/post
+          </button>
+          <button
+            type="button"
+            className="preset-pill mono"
+            onClick={() => setTargetUrl("https://httpbin.org/anything")}
+          >
+            https://httpbin.org/anything
+          </button>
+        </div>
+
         {error && <div className="replay-error-banner">{error}</div>}
 
         {/* Edit-then-replay editor */}

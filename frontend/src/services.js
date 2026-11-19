@@ -118,6 +118,77 @@ function groupRequestsByDate(requestsList) {
   return groupedRequests;
 }
 
+async function sendSampleWebhook(binPath, type = "order") {
+  const urlBase = `${API_BASE_URL}/api/endpoints/${binPath}`;
+  if (type === "stripe") {
+    const payload = {
+      id: "evt_1P8x9" + Math.floor(1000 + Math.random() * 9000),
+      object: "event",
+      type: "checkout.session.completed",
+      created: Math.floor(Date.now() / 1000),
+      data: {
+        object: {
+          id: "cs_live_" + Math.floor(100000 + Math.random() * 900000),
+          amount_total: 24900,
+          currency: "usd",
+          customer_email: "alex.dev@linear.app",
+          payment_status: "paid",
+        },
+      },
+    };
+    return axios.post(`${urlBase}/webhooks/stripe`, payload, {
+      headers: {
+        "Content-Type": "application/json",
+        "stripe-signature":
+          "t=1700000000,v1=5257a869e7ecebeda32affa62cdca3fa51cad7e77a0e56ff536d0ce8e108d8bd",
+      },
+    });
+  }
+
+  if (type === "github") {
+    const payload = {
+      ref: "refs/heads/main",
+      repository: {
+        name: "hookprism-core",
+        full_name: "tanmay/hookprism-core",
+        private: false,
+      },
+      pusher: { name: "tanmayjoddar", email: "tanmay@hookprism.io" },
+      head_commit: {
+        id: "9f82d1c",
+        message: "feat(engine): add zero-latency dual target diffing",
+        timestamp: new Date().toISOString(),
+      },
+    };
+    return axios.post(`${urlBase}/webhooks/github`, payload, {
+      headers: {
+        "Content-Type": "application/json",
+        "X-Hub-Signature-256":
+          "sha256=d5794d51ec517bd503b47429fa4ea1a86dc6158bb04204c57b131b17800f195e",
+        "X-GitHub-Event": "push",
+      },
+    });
+  }
+
+  // Default: order.created
+  const payload = {
+    event: "order.created",
+    timestamp: new Date().toISOString(),
+    order_id: "ord_" + Math.floor(100000 + Math.random() * 900000),
+    amount: 149.99,
+    currency: "usd",
+    customer: {
+      id: "cus_92819",
+      name: "Sarah Chen",
+      email: "sarah.chen@acmecorp.io",
+    },
+    line_items: [{ sku: "PRO-ANNUAL-TIER", qty: 1, price: 149.99 }],
+  };
+  return axios.post(`${urlBase}/orders`, payload, {
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
 export default {
   API_BASE_URL,
   createBin,
@@ -131,6 +202,7 @@ export default {
   getReplays,
   sendDualReplay,
   verifySignature,
+  sendSampleWebhook,
   removeBinFromPath,
   convertDbTimetoDateObj,
   formatRelativeTime,
