@@ -1,15 +1,41 @@
+/* ============================================================
+   HookPrism Compare Tab (DiffTab.css)
+   ============================================================ */
+
 .diff-tab-container {
   display: flex;
   flex-direction: column;
   gap: 16px;
   padding: 16px;
+  min-width: 0;
 }
 
 .diff-form-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.diff-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.diff-header-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.diff-heading {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 .diff-inputs-grid {
@@ -30,14 +56,13 @@
   gap: 6px;
 }
 
-.diff-input-group label {
+.diff-label {
   font-size: 11px;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: var(--text-muted);
 }
 
 .diff-actions-row {
-  margin-top: 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -52,36 +77,40 @@
   flex-wrap: wrap;
 }
 
-.preset-label {
-  font-size: 11px;
-  color: var(--text-muted);
-}
-
-.preset-pill {
-  background: var(--bg-sidebar);
-  border: 1px solid var(--border-subtle);
+.preset-chip {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  color: #38bdf8;
+  color: var(--text-secondary);
   font-size: 11px;
   padding: 3px 8px;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
-.preset-pill:hover {
+.preset-chip:hover {
   background: var(--bg-hover);
-  border-color: #38bdf8;
-  color: #ffffff;
+  border-color: var(--accent);
+  color: var(--text-primary);
 }
 
 .diff-error-banner {
-  margin-top: 10px;
   padding: 8px 12px;
   background: var(--danger-subtle);
-  color: var(--danger-color);
+  color: var(--danger);
   border: 1px solid var(--danger-border);
   border-radius: var(--radius-md);
   font-size: 12px;
+}
+
+.diff-empty-state {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 24px 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
 }
 
 .diff-results-container {
@@ -103,8 +132,8 @@
 }
 
 .metric-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 10px 14px;
 }
@@ -133,17 +162,17 @@
 }
 
 .delta-faster {
-  color: var(--success-color);
+  color: var(--success);
 }
 
 .delta-slower {
-  color: var(--warning-color);
+  color: var(--warning);
 }
 
 /* Side by Side Card */
 .side-by-side-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   overflow: hidden;
 }
@@ -151,8 +180,8 @@
 .sbs-header {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  background: var(--bg-sidebar);
-  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-raised);
+  border-bottom: 1px solid var(--border);
 }
 
 .sbs-col-title {
@@ -160,10 +189,7 @@
   font-size: 11px;
   font-weight: 600;
   color: var(--text-secondary);
-  border-right: 1px solid var(--border-subtle);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  border-right: 1px solid var(--border);
 }
 
 .sbs-col-title:last-child {
@@ -180,7 +206,8 @@
 .sbs-body-col {
   padding: 12px;
   overflow-y: auto;
-  border-right: 1px solid var(--border-subtle);
+  overflow-x: auto;
+  border-right: 1px solid var(--border);
   background: var(--bg-app);
 }
 
@@ -194,12 +221,13 @@
   line-height: 1.45;
   white-space: pre-wrap;
   word-break: break-all;
+  color: var(--text-primary);
 }
 
 /* Headers Diff */
 .headers-diff-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 14px;
 }
@@ -227,12 +255,12 @@
 
 .hdiff-header {
   color: var(--text-muted);
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border);
   font-weight: 600;
 }
 
 .hdiff-mismatch {
-  background: rgba(245, 158, 11, 0.08);
+  background: var(--warning-subtle);
 }
 
 .hcol-key {
@@ -245,11 +273,11 @@
 }
 
 .match-yes {
-  color: var(--success-color);
+  color: var(--success);
   font-weight: bold;
 }
 
 .match-no {
-  color: var(--danger-color);
+  color: var(--danger);
   font-weight: bold;
 }

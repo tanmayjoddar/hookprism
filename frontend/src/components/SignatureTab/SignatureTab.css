@@ -1,13 +1,18 @@
+/* ============================================================
+   HookPrism Signature Verification Tab (SignatureTab.css)
+   ============================================================ */
+
 .sig-tab-container {
   display: flex;
   flex-direction: column;
   gap: 16px;
   padding: 16px;
+  min-width: 0;
 }
 
 .sig-header-box {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 10px 14px;
 }
@@ -31,9 +36,9 @@
 }
 
 .sig-tag-gh {
-  background: rgba(59, 130, 246, 0.12);
-  color: #60a5fa;
-  border: 1px solid rgba(59, 130, 246, 0.25);
+  background: rgba(96, 165, 250, 0.12);
+  color: #93bbfd;
+  border: 1px solid rgba(96, 165, 250, 0.25);
 }
 
 .sig-tag-stripe {
@@ -48,15 +53,35 @@
 }
 
 .sig-form-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sig-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sig-header-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sig-heading {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 .sig-helper-note {
-  margin-top: 8px;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-muted);
   line-height: 1.4;
 }
@@ -65,42 +90,61 @@
   display: flex;
   gap: 8px;
   align-items: center;
-}
-
-@media (max-width: 640px) {
-  .sig-inputs-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
+  flex-wrap: wrap;
 }
 
 .sig-select {
-  padding: 7px 10px;
-  background: var(--bg-sidebar);
+  height: 36px;
+  padding: 6px 10px;
+  background: var(--bg-raised);
   color: var(--text-primary);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
   font-size: 12px;
 }
 
-.sig-secret-input {
+.sig-input-wrapper {
   flex: 1;
-  padding: 7px 12px;
+  min-width: 220px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sig-secret-input {
+  width: 100%;
+  height: 36px;
+  padding: 6px 48px 6px 12px;
+  font-size: 12px;
+}
+
+.sig-show-toggle {
+  position: absolute;
+  right: 8px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.sig-show-toggle:hover {
+  color: var(--text-primary);
 }
 
 .sig-error-banner {
-  margin-top: 10px;
   padding: 8px 12px;
   background: var(--danger-subtle);
-  color: var(--danger-color);
+  color: var(--danger);
   border: 1px solid var(--danger-border);
   border-radius: var(--radius-md);
   font-size: 12px;
 }
 
 .sig-result-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 16px;
   display: flex;
@@ -124,20 +168,20 @@
   padding: 4px 10px;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   border-radius: var(--radius-sm);
   font-family: var(--font-mono);
 }
 
 .sig-badge-valid {
   background: var(--success-subtle);
-  color: var(--success-color);
+  color: var(--success);
   border: 1px solid var(--success-border);
 }
 
 .sig-badge-invalid {
   background: var(--danger-subtle);
-  color: var(--danger-color);
+  color: var(--danger);
   border: 1px solid var(--danger-border);
 }
 
@@ -149,7 +193,7 @@
 .sig-reason-box {
   padding: 8px 12px;
   background: var(--danger-subtle);
-  color: var(--danger-color);
+  color: var(--danger);
   border-radius: var(--radius-md);
   font-size: 12px;
 }
@@ -161,13 +205,14 @@
   background: var(--bg-app);
   padding: 12px;
   border-radius: var(--radius-md);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border);
 }
 
 .sig-detail-item {
   display: grid;
   grid-template-columns: 140px 1fr;
   font-size: 12px;
+  gap: 8px;
 }
 
 .detail-label {

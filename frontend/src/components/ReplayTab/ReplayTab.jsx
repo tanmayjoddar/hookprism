@@ -13,7 +13,6 @@ const ReplayTab = ({ request }) => {
   const [latestReplay, setLatestReplay] = useState(null);
   const [replaysHistory, setReplaysHistory] = useState([]);
 
-  // Initialize custom body & headers when request changes
   useEffect(() => {
     if (request) {
       setMethod(request.payload.method || "POST");
@@ -29,7 +28,6 @@ const ReplayTab = ({ request }) => {
         : "{}";
       setCustomHeaders(initialHeaders);
 
-      // Load replay history
       loadHistory();
     }
   }, [request.id]);
@@ -89,12 +87,26 @@ const ReplayTab = ({ request }) => {
     <div className="replay-tab-container">
       {/* Target URL & Action Bar */}
       <form onSubmit={handleSendReplay} className="replay-action-card">
+        <div className="replay-card-header">
+          <div className="replay-header-title-row">
+            <span className="replay-heading">Resend this request</span>
+            <span className="tech-tag mono">(Replay)</span>
+            <span className="info-trigger" tabIndex="0" role="note" aria-label="SSRF Safety Info">
+              i
+              <span className="info-tooltip">
+                Blocks requests to private or internal addresses so replay cannot be abused. 10s execution timeout.
+              </span>
+            </span>
+          </div>
+        </div>
+
         <div className="replay-input-row">
           {showEditor && (
             <select
               className="method-select mono"
               value={method}
               onChange={(e) => setMethod(e.target.value)}
+              aria-label="HTTP Method"
             >
               <option value="POST">POST</option>
               <option value="GET">GET</option>
@@ -107,21 +119,22 @@ const ReplayTab = ({ request }) => {
           <input
             type="text"
             className="target-url-input mono"
-            placeholder="https://api.example.com/webhook-receiver"
+            placeholder="https://your-api.com/webhook"
             value={targetUrl}
             onChange={(e) => setTargetUrl(e.target.value)}
+            aria-label="Target URL"
           />
 
-          <button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? "Replaying..." : "Send Replay"}
+          <button type="submit" className="btn btn-primary btn-sm" disabled={loading}>
+            {loading ? "Sending..." : "Send replay"}
           </button>
 
           <button
             type="button"
-            className={`btn ${showEditor ? "btn-active" : ""}`}
+            className={`btn btn-sm ${showEditor ? "btn-active" : ""}`}
             onClick={() => setShowEditor(!showEditor)}
           >
-            {showEditor ? "Hide Editor" : "Edit-then-Replay"}
+            {showEditor ? "Hide editor" : "Edit before resending"}
           </button>
         </div>
 
@@ -129,17 +142,17 @@ const ReplayTab = ({ request }) => {
           <span className="preset-label">Quick test:</span>
           <button
             type="button"
-            className="preset-pill mono"
+            className="preset-chip mono"
             onClick={() => setTargetUrl("https://httpbin.org/post")}
           >
-            https://httpbin.org/post
+            httpbin.org/post
           </button>
           <button
             type="button"
-            className="preset-pill mono"
+            className="preset-chip mono"
             onClick={() => setTargetUrl("https://httpbin.org/anything")}
           >
-            https://httpbin.org/anything
+            httpbin.org/anything
           </button>
         </div>
 
@@ -150,9 +163,7 @@ const ReplayTab = ({ request }) => {
           <div className="edit-replay-panel">
             <div className="editor-columns">
               <div className="editor-group">
-                <div className="editor-header">
-                  <span>Custom Headers (JSON)</span>
-                </div>
+                <label className="editor-label">Headers (JSON)</label>
                 <textarea
                   className="mono code-textarea"
                   rows={6}
@@ -163,9 +174,7 @@ const ReplayTab = ({ request }) => {
               </div>
 
               <div className="editor-group">
-                <div className="editor-header">
-                  <span>Custom Payload Body</span>
-                </div>
+                <label className="editor-label">Request body</label>
                 <textarea
                   className="mono code-textarea"
                   rows={6}
@@ -197,7 +206,7 @@ const ReplayTab = ({ request }) => {
                 {latestReplay.response_status || "ERR"}
               </span>
               <span className="latency-badge mono">{latestReplay.latency_ms} ms</span>
-              <span className="target-url-tag mono">{latestReplay.target_url}</span>
+              <span className="target-url-tag mono truncate">{latestReplay.target_url}</span>
             </div>
             <span className="time-tag mono">
               {helpers.formatRelativeTime(latestReplay.created_at)}
@@ -219,12 +228,12 @@ const ReplayTab = ({ request }) => {
       {/* History List */}
       <div className="replay-history-section">
         <div className="history-header">
-          <span>Replay History ({replaysHistory.length})</span>
+          <span>Replay history ({replaysHistory.length})</span>
         </div>
 
         {replaysHistory.length === 0 && !loading && (
           <div className="history-empty">
-            No replays sent yet for this request. Enter a target URL above to test.
+            No replays sent yet. Enter a target URL above to test.
           </div>
         )}
 

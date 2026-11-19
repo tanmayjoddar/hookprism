@@ -10,12 +10,15 @@ const RequestList = ({
   setSearchTerm,
   binPath,
   onDeleteRequest,
+  isOpenOnMobile = false,
+  onCloseMobile,
 }) => {
-  // Flatten or use grouped requests
+  // Flatten grouped requests
   const allRequests = requests.reduce((acc, g) => [...acc, ...g.requests], []);
 
   const handleSelect = async (req) => {
     setSelectedRequestID(req.id);
+    if (onCloseMobile) onCloseMobile();
     try {
       const full = await helpers.getRequest(req.id);
       full.date = req.received_at;
@@ -35,22 +38,27 @@ const RequestList = ({
   };
 
   return (
-    <aside className="request-sidebar">
-      <div className="sidebar-search-box">
+    <aside className={`request-sidebar ${isOpenOnMobile ? "mobile-open" : ""}`}>
+      <div className="sidebar-header">
         <input
           type="search"
           className="sidebar-search-input mono"
           placeholder="Filter requests..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          aria-label="Filter captured requests"
         />
-        <span className="count-pill mono">{allRequests.length}</span>
+        <span className="sidebar-count mono">
+          {allRequests.length} {allRequests.length === 1 ? "request" : "requests"}
+        </span>
       </div>
 
-      <div className="sidebar-list-container">
+      <div className="sidebar-list-container" role="list">
         {allRequests.length === 0 ? (
           <div className="empty-sidebar-msg">
-            {searchTerm ? "No matching requests" : "No requests received yet"}
+            {searchTerm
+              ? "No matching requests"
+              : "Requests will appear here the moment they arrive."}
           </div>
         ) : (
           allRequests.map((req) => {
@@ -72,6 +80,7 @@ const RequestList = ({
             return (
               <div
                 key={req.id}
+                role="listitem"
                 className={`sidebar-item ${isSelected ? "sidebar-item-active" : ""}`}
                 onClick={() => handleSelect(req)}
               >
@@ -87,9 +96,11 @@ const RequestList = ({
                     {helpers.formatRelativeTime(req.received_at)}
                   </span>
                   <button
+                    type="button"
                     className="item-delete-btn"
                     onClick={(e) => handleDelete(e, req.id)}
-                    title="Delete request"
+                    title="Delete this request"
+                    aria-label={`Delete request ${displayPath}`}
                   >
                     &times;
                   </button>

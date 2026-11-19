@@ -12,7 +12,7 @@ const DiffTab = ({ request }) => {
   const handleRunDiff = async (e) => {
     e.preventDefault();
     if (!targetUrlA.trim() || !targetUrlB.trim()) {
-      setError("Please provide both Target URL A and Target URL B");
+      setError("Please provide both Target URLs to compare");
       return;
     }
 
@@ -26,7 +26,7 @@ const DiffTab = ({ request }) => {
       });
       setDiffResult(result);
     } catch (err) {
-      setError(err.response?.data?.error || err.message || "Dual replay failed");
+      setError(err.response?.data?.error || err.message || "Dual comparison failed");
     } finally {
       setLoading(false);
     }
@@ -35,39 +35,55 @@ const DiffTab = ({ request }) => {
   return (
     <div className="diff-tab-container">
       <form onSubmit={handleRunDiff} className="diff-form-card">
+        <div className="diff-card-header">
+          <div className="diff-header-title-row">
+            <span className="diff-heading">Compare two servers</span>
+            <span className="tech-tag mono">(Dual-target diff)</span>
+            <span className="info-trigger" tabIndex="0" role="note" aria-label="Compare two servers info">
+              i
+              <span className="info-tooltip">
+                Sends the same request to both URLs at the same time and shows status, speed, and body differences side by side.
+              </span>
+            </span>
+          </div>
+        </div>
+
         <div className="diff-inputs-grid">
           <div className="diff-input-group">
-            <label>Target URL A (e.g. Production)</label>
+            <label className="diff-label">Target URL A (e.g. Staging)</label>
             <input
               type="text"
               className="mono"
-              placeholder="https://api.example.com/prod/webhook"
+              placeholder="https://staging.api.example.com/webhook"
               value={targetUrlA}
               onChange={(e) => setTargetUrlA(e.target.value)}
+              aria-label="Target URL A"
             />
           </div>
 
           <div className="diff-input-group">
-            <label>Target URL B (e.g. Staging / Canary)</label>
+            <label className="diff-label">Target URL B (e.g. Production)</label>
             <input
               type="text"
               className="mono"
-              placeholder="https://api.example.com/staging/webhook"
+              placeholder="https://api.example.com/webhook"
               value={targetUrlB}
               onChange={(e) => setTargetUrlB(e.target.value)}
+              aria-label="Target URL B"
             />
           </div>
         </div>
 
         <div className="diff-actions-row">
-          <button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? "Replaying Dual Targets..." : "Run Dual Replay & Diff"}
+          <button type="submit" className="btn btn-primary btn-sm" disabled={loading}>
+            {loading ? "Replaying Dual Targets..." : "Run comparison"}
           </button>
+
           <div className="diff-presets">
-            <span className="preset-label">Quick diff presets:</span>
+            <span className="preset-label">Presets:</span>
             <button
               type="button"
-              className="preset-pill mono"
+              className="preset-chip mono"
               onClick={() => {
                 setTargetUrlA("https://httpbin.org/status/200");
                 setTargetUrlB("https://httpbin.org/status/201");
@@ -77,19 +93,25 @@ const DiffTab = ({ request }) => {
             </button>
             <button
               type="button"
-              className="preset-pill mono"
+              className="preset-chip mono"
               onClick={() => {
-                setTargetUrlA("https://httpbin.org/anything?env=prod");
-                setTargetUrlB("https://httpbin.org/anything?env=staging");
+                setTargetUrlA("https://httpbin.org/anything?env=staging");
+                setTargetUrlB("https://httpbin.org/anything?env=prod");
               }}
             >
-              Prod vs Staging
+              Staging vs Prod
             </button>
           </div>
         </div>
 
         {error && <div className="diff-error-banner">{error}</div>}
       </form>
+
+      {!diffResult && !loading && (
+        <div className="diff-empty-state">
+          Enter two URLs above or pick a preset to see side-by-side status, latency, and response differences.
+        </div>
+      )}
 
       {diffResult && (
         <div className="diff-results-container">
@@ -148,10 +170,10 @@ const DiffTab = ({ request }) => {
           {/* Side-by-side Response Body */}
           <div className="side-by-side-card">
             <div className="sbs-header">
-              <div className="sbs-col-title mono">
+              <div className="sbs-col-title mono truncate">
                 Target A: {diffResult.targetA.target_url} ({diffResult.targetA.response_status})
               </div>
-              <div className="sbs-col-title mono">
+              <div className="sbs-col-title mono truncate">
                 Target B: {diffResult.targetB.target_url} ({diffResult.targetB.response_status})
               </div>
             </div>

@@ -1,19 +1,26 @@
+/* ============================================================
+   HookPrism Endpoint Header (EndpointHeader.css)
+   ============================================================ */
+
 .endpoint-navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 16px;
-  background: var(--bg-sidebar);
-  border-bottom: 1px solid var(--border-subtle);
+  padding: 0 16px;
+  height: 48px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
   gap: 12px;
-  flex-wrap: wrap;
-  min-height: 48px;
+  position: relative;
+  z-index: 30;
+  flex-shrink: 0;
 }
 
 .nav-left {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .nav-brand {
@@ -22,169 +29,174 @@
   gap: 8px;
   text-decoration: none;
   color: var(--text-primary);
-  transition: opacity 0.15s ease;
-}
-
-.nav-brand:hover {
-  opacity: 0.85;
-}
-
-.nav-brand-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #38bdf8;
-  box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: -0.01em;
 }
 
 .nav-brand-title {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 0.08em;
   color: var(--text-primary);
 }
 
 .nav-divider {
   color: var(--text-muted);
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .nav-bin-uuid {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.socket-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 6px;
+  border-left: 1px solid var(--border);
+}
+
+.socket-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.socket-dot.is-connected {
+  background-color: var(--success);
+}
+
+.socket-dot.is-reconnecting {
+  background-color: var(--warning);
+}
+
+.socket-label {
   font-size: 11px;
   color: var(--text-muted);
-  letter-spacing: 0.02em;
 }
 
-.socket-status-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 2px 7px;
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.22);
-  border-radius: 9999px;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  color: #34d399;
-}
-
-.live-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background-color: var(--success-color);
-  box-shadow: 0 0 6px var(--success-color);
-  animation: liveBlink 1.8s infinite;
-}
-
-@keyframes liveBlink {
-  0% { opacity: 0.4; transform: scale(0.9); }
-  50% { opacity: 1; transform: scale(1.1); }
-  100% { opacity: 0.4; transform: scale(0.9); }
-}
-
+/* Center Pill */
 .nav-center {
   flex: 1;
   display: flex;
   justify-content: center;
-  min-width: 320px;
+  max-width: 620px;
+  margin: 0 auto;
+  min-width: 0;
 }
 
-.endpoint-address-bar {
+.endpoint-address-pill {
   display: flex;
   align-items: center;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 3px 4px 3px 8px;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  max-width: 620px;
+  padding: 2px 4px 2px 10px;
   width: 100%;
+  gap: 10px;
+  min-width: 0;
 }
 
-.endpoint-address-bar:hover {
-  border-color: var(--border-strong);
-}
-
-.method-pill {
-  font-size: 9px;
-  font-weight: 700;
-  font-family: var(--font-mono);
-  letter-spacing: 0.05em;
-  color: #38bdf8;
-  background: rgba(56, 189, 248, 0.1);
-  border: 1px solid rgba(56, 189, 248, 0.25);
-  border-radius: var(--radius-sm);
-  padding: 2px 5px;
-  margin-right: 8px;
+.pill-prefix {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   flex-shrink: 0;
 }
 
-.endpoint-url-text {
-  flex: 1;
+.pill-name {
   font-size: 11px;
+  font-weight: 600;
   color: var(--text-secondary);
-  user-select: all;
-}
-
-.address-bar-actions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.action-btn {
-  background: var(--bg-hover);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  color: var(--text-primary);
-  font-size: 11px;
-  font-weight: 500;
-  font-family: var(--font-ui);
-  padding: 2px 8px;
-  cursor: pointer;
-  transition: all 0.15s ease;
   white-space: nowrap;
 }
 
-.action-btn:hover {
-  background: var(--bg-active);
-  border-color: var(--border-strong);
-  color: #ffffff;
+.pill-url {
+  flex: 1;
+  font-size: 12px;
+  color: var(--text-muted);
+  min-width: 0;
+  user-select: all;
 }
 
-.test-btn {
-  background: rgba(56, 189, 248, 0.12);
-  color: #38bdf8;
-  border-color: rgba(56, 189, 248, 0.28);
+.pill-copy-btn {
+  height: 26px;
+  padding: 0 10px;
+  font-size: 11px;
+  flex-shrink: 0;
 }
 
-.test-btn:hover {
-  background: rgba(56, 189, 248, 0.2);
-  border-color: rgba(56, 189, 248, 0.5);
-  color: #ffffff;
-}
-
+/* Right Actions */
 .nav-right {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .btn-chaos-active {
-  border-color: rgba(245, 158, 11, 0.5);
-  background: rgba(245, 158, 11, 0.15);
-  color: #fbbf24;
+  border-color: rgba(234, 179, 8, 0.4);
+  background: var(--warning-subtle);
+  color: var(--warning);
 }
 
-.chaos-pulse {
+.chaos-indicator-dot {
   display: inline-block;
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: #f59e0b;
+  background: var(--warning);
   margin-right: 4px;
-  animation: liveBlink 1.5s infinite;
+}
+
+.nav-mobile-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .endpoint-navbar {
+    padding: 0 12px;
+  }
+  .nav-center {
+    max-width: 380px;
+  }
+  .nav-right {
+    display: none;
+    position: absolute;
+    top: 48px;
+    right: 12px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    padding: 10px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  }
+  .nav-right.is-open {
+    display: flex;
+  }
+  .nav-mobile-toggle {
+    display: block;
+  }
+}
+
+@media (max-width: 640px) {
+  .socket-status {
+    display: none;
+  }
+  .nav-center {
+    max-width: 220px;
+  }
+  .pill-name {
+    display: none;
+  }
 }

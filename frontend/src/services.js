@@ -189,8 +189,14 @@ async function sendSampleWebhook(binPath, type = "order") {
   });
 }
 
+async function checkHealth() {
+  const result = await axios.get(`${API_BASE_URL}/health`, { timeout: 45000 });
+  return result.data;
+}
+
 export default {
   API_BASE_URL,
+  checkHealth,
   createBin,
   getRequestList,
   getRequest,

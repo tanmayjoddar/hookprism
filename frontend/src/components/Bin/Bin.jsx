@@ -15,12 +15,13 @@ const Bin = () => {
   const [selectedRequestID, setSelectedRequestID] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [copiedCurl, setCopiedCurl] = useState(false);
+  const [copiedBrowserUrl, setCopiedBrowserUrl] = useState(false);
   const [isChaosOpen, setIsChaosOpen] = useState(false);
   const [chaosActive, setChaosActive] = useState(false);
   const [loading, setLoading] = useState(true);
   const [simulatingType, setSimulatingType] = useState(null);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
-  // Load initial requests and chaos config
   useEffect(() => {
     socket.emit("joinBinRoom", bin_path);
 
@@ -58,7 +59,6 @@ const Bin = () => {
 
     loadData();
 
-    // Socket Event Handlers
     const handleNewRequest = (newRequest) => {
       const newRequestMod = {
         ...newRequest,
@@ -67,7 +67,6 @@ const Bin = () => {
 
       setRequestList((prev) => [newRequestMod, ...prev]);
 
-      // If nothing was selected, select the new one
       setSelectedRequestID((prevId) => {
         if (!prevId) {
           helpers.getRequest(newRequest.id).then((full) => {
@@ -123,7 +122,6 @@ const Bin = () => {
   };
 
   const handleClearAll = async () => {
-    if (!window.confirm("Delete all captured requests in this bin?")) return;
     try {
       await helpers.deleteAllRequests(bin_path);
       setRequestList([]);
@@ -154,7 +152,13 @@ const Bin = () => {
   const copySampleCurl = () => {
     navigator.clipboard.writeText(readyCurlCmd);
     setCopiedCurl(true);
-    setTimeout(() => setCopiedCurl(false), 2000);
+    setTimeout(() => setCopiedCurl(false), 1500);
+  };
+
+  const copyBrowserUrl = () => {
+    navigator.clipboard.writeText(browserTestUrl);
+    setCopiedBrowserUrl(true);
+    setTimeout(() => setCopiedBrowserUrl(false), 1500);
   };
 
   const triggerSimulation = async (type) => {
@@ -162,7 +166,6 @@ const Bin = () => {
     try {
       await helpers.sendSampleWebhook(bin_path, type);
     } catch (err) {
-      console.error("Simulation failed:", err);
       alert("Simulation failed: " + (err.response?.data?.error || err.message));
     } finally {
       setTimeout(() => setSimulatingType(null), 600);
@@ -176,7 +179,19 @@ const Bin = () => {
         onOpenChaos={() => setIsChaosOpen(true)}
         onClearAll={handleClearAll}
         isChaosActive={chaosActive}
+        requestCount={requestList.length}
       />
+
+      {/* Mobile drawer toggle */}
+      <div className="bin-mobile-subbar">
+        <button
+          type="button"
+          className="btn btn-sm"
+          onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
+        >
+          <span>Requests ({requestList.length})</span>
+        </button>
+      </div>
 
       <div className="bin-layout">
         <RequestList
@@ -188,149 +203,133 @@ const Bin = () => {
           setSearchTerm={setSearchTerm}
           binPath={bin_path}
           onDeleteRequest={handleDeleteRequest}
+          isOpenOnMobile={mobileSidebarOpen}
+          onCloseMobile={() => setMobileSidebarOpen(false)}
         />
 
         <main className="bin-main-content">
           {loading ? (
-            <div className="empty-state-card">
-              <div className="spinner" />
-              <div className="empty-title">Connecting to live inspection stream...</div>
+            <div className="bin-loading-view">
+              <div className="skeleton bin-skeleton-bar" style={{ width: "240px", height: "24px" }} />
+              <div className="skeleton bin-skeleton-bar" style={{ width: "420px", height: "14px" }} />
+              <div className="bin-skeleton-cards">
+                <div className="skeleton bin-skeleton-card" />
+                <div className="skeleton bin-skeleton-card" />
+                <div className="skeleton bin-skeleton-card" />
+              </div>
             </div>
           ) : !selectedRequest ? (
-            <div className="empty-state-playground">
-              {/* Status Header */}
-              <div className="empty-hero-badge">
-                <span className="live-pulse" />
-                <span>Live Webhook Ingestion Active</span>
-              </div>
-              <h2 className="empty-hero-title">Awaiting Webhook Payloads</h2>
-              <p className="empty-hero-desc">
-                HookPrism captures, validates cryptographic signatures, replays with SSRF safety,
-                and compares responses side-by-side. Choose how you want to test this bin:
-              </p>
-
-              {/* 1-Click Interactive Simulation Cards */}
-              <div className="simulation-section">
-                <div className="simulation-header">
-                  <span className="sim-title">Method 1: Instant 1-Click Simulations</span>
-                  <span className="sim-tag">Zero-tooling verification</span>
-                </div>
-                <div className="simulation-cards-grid">
-                  <button
-                    type="button"
-                    className="sim-card"
-                    onClick={() => triggerSimulation("order")}
-                    disabled={!!simulatingType}
-                  >
-                    <div className="sim-card-top">
-                      <span className="badge-method badge-post">POST</span>
-                      <span className="sim-card-title">Order Created</span>
-                    </div>
-                    <p className="sim-card-desc">Simulate an ecommerce payment with JSON payload &amp; headers.</p>
-                    <div className="sim-card-action">
-                      {simulatingType === "order" ? "Sending..." : "⚡ Send Order Event"}
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    className="sim-card"
-                    onClick={() => triggerSimulation("stripe")}
-                    disabled={!!simulatingType}
-                  >
-                    <div className="sim-card-top">
-                      <span className="badge-method badge-post">POST</span>
-                      <span className="sim-card-title">Stripe Checkout</span>
-                    </div>
-                    <p className="sim-card-desc">Simulate Stripe webhook with HMAC signature header.</p>
-                    <div className="sim-card-action">
-                      {simulatingType === "stripe" ? "Sending..." : "⚡ Simulate Stripe Event"}
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    className="sim-card"
-                    onClick={() => triggerSimulation("github")}
-                    disabled={!!simulatingType}
-                  >
-                    <div className="sim-card-top">
-                      <span className="badge-method badge-post">POST</span>
-                      <span className="sim-card-title">GitHub Push</span>
-                    </div>
-                    <p className="sim-card-desc">Simulate GitHub commit push with X-Hub-Signature-256.</p>
-                    <div className="sim-card-action">
-                      {simulatingType === "github" ? "Sending..." : "⚡ Simulate GitHub Push"}
-                    </div>
-                  </button>
-                </div>
+            <div className="bin-empty-playground">
+              <div className="empty-header-block">
+                <h2 className="empty-main-heading">Waiting for your first request</h2>
+                <p className="empty-main-subtext">
+                  Pick any one of these three ways. The request will show up in the left list
+                  instantly.
+                </p>
               </div>
 
-              {/* Browser Address Bar & cURL Methods */}
-              <div className="methods-split-grid">
-                {/* Method 2: Browser Address Bar */}
-                <div className="method-card">
-                  <div className="method-card-header">
-                    <span className="method-card-num">Method 2</span>
-                    <span className="method-card-heading">Test Directly from Browser</span>
+              {/* 3 Equal-Height Cards */}
+              <div className="empty-cards-grid">
+                {/* Card 01 */}
+                <div className="empty-card">
+                  <div className="empty-card-top">
+                    <span className="empty-card-num mono">01</span>
+                    <h3 className="empty-card-title">Send a sample</h3>
+                    <p className="empty-card-desc">
+                      Fire a realistic webhook payload directly from this page.
+                    </p>
                   </div>
-                  <p className="method-card-p">
-                    HookPrism accepts all HTTP methods (GET, POST, etc.). Open a live request in a new tab;
-                    watch it appear here via WebSockets in real time:
-                  </p>
-                  <div className="browser-test-action">
+
+                  <div className="empty-card-cta">
+                    <div className="sample-buttons-row">
+                      <button
+                        type="button"
+                        className="btn btn-sm"
+                        onClick={() => triggerSimulation("order")}
+                        disabled={!!simulatingType}
+                      >
+                        {simulatingType === "order" ? "Sending..." : "Order"}
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-sm"
+                        onClick={() => triggerSimulation("stripe")}
+                        disabled={!!simulatingType}
+                      >
+                        {simulatingType === "stripe" ? "Sending..." : "Stripe"}
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-sm"
+                        onClick={() => triggerSimulation("github")}
+                        disabled={!!simulatingType}
+                      >
+                        {simulatingType === "github" ? "Sending..." : "GitHub"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card 02 (FEATURED: Solid Accent) */}
+                <div className="empty-card empty-card-featured">
+                  <div className="empty-card-top">
+                    <div className="featured-card-badge-row">
+                      <span className="empty-card-num mono">02</span>
+                      <span className="featured-pill mono">RECOMMENDED</span>
+                    </div>
+                    <h3 className="empty-card-title">Open in browser</h3>
+                    <p className="empty-card-desc">
+                      Open a test URL in a new tab. Your browser sends a request to the endpoint.
+                    </p>
+                  </div>
+
+                  <div className="empty-card-cta">
                     <a
                       href={browserTestUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn btn-primary btn-sm"
+                      className="btn btn-sm btn-featured-cta"
                     >
-                      ↗ Open Test URL in New Tab
+                      Open test URL in new tab
                     </a>
-                  </div>
-                  <div className="method-url-preview mono truncate" title={browserTestUrl}>
-                    {browserTestUrl}
-                  </div>
-                </div>
 
-                {/* Method 3: cURL / Postman / CLI */}
-                <div className="method-card">
-                  <div className="method-card-header">
-                    <span className="method-card-num">Method 3</span>
-                    <span className="method-card-heading">cURL &amp; Webhook Senders</span>
-                  </div>
-                  <p className="method-card-p">
-                    Send from your terminal or point Stripe CLI, GitHub Webhooks, or Twilio to this URL:
-                  </p>
-                  <div className="sample-curl-box">
-                    <div className="sample-curl-header">
-                      <span className="mono">Ready-to-use cURL:</span>
-                      <button className="btn btn-sm" onClick={copySampleCurl}>
-                        {copiedCurl ? "Copied!" : "Copy cURL"}
+                    <div className="browser-url-box">
+                      <span className="browser-url-text mono truncate" title={browserTestUrl}>
+                        {browserTestUrl}
+                      </span>
+                      <button
+                        type="button"
+                        className="btn-featured-copy mono"
+                        onClick={copyBrowserUrl}
+                      >
+                        {copiedBrowserUrl ? "Copied" : "Copy"}
                       </button>
                     </div>
-                    <pre className="mono sample-curl-code">{readyCurlCmd}</pre>
                   </div>
                 </div>
-              </div>
 
-              {/* Feature Verification Callout */}
-              <div className="features-badge-bar">
-                <div className="feat-pill" title="Pre-flight DNS validation prevents private network traversal">
-                  <span className="feat-icon">🛡️</span>
-                  <span>SSRF Safe Replay</span>
-                </div>
-                <div className="feat-pill" title="Simultaneous dispatch to Staging &amp; Prod with diff comparison">
-                  <span className="feat-icon">⚖️</span>
-                  <span>Dual Target Diffing</span>
-                </div>
-                <div className="feat-pill" title="Configurable status codes, latency, and random error rates">
-                  <span className="feat-icon">🧪</span>
-                  <span>Chaos Mock Engine</span>
-                </div>
-                <div className="feat-pill" title="Timing-safe cryptographic verification for Stripe and GitHub">
-                  <span className="feat-icon">🔐</span>
-                  <span>HMAC Verification</span>
+                {/* Card 03 */}
+                <div className="empty-card">
+                  <div className="empty-card-top">
+                    <span className="empty-card-num mono">03</span>
+                    <h3 className="empty-card-title">Use the terminal</h3>
+                    <p className="empty-card-desc">
+                      Copy a ready-to-run cURL command and paste it into your terminal.
+                    </p>
+                  </div>
+
+                  <div className="empty-card-cta">
+                    <div className="empty-curl-block">
+                      <button
+                        type="button"
+                        className="curl-copy-btn btn btn-sm mono"
+                        onClick={copySampleCurl}
+                      >
+                        {copiedCurl ? "Copied" : "Copy"}
+                      </button>
+                      <pre className="mono empty-curl-code">{readyCurlCmd}</pre>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

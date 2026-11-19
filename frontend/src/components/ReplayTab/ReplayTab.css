@@ -1,44 +1,79 @@
+/* ============================================================
+   HookPrism Replay Tab (ReplayTab.css)
+   ============================================================ */
+
 .replay-tab-container {
   display: flex;
   flex-direction: column;
   gap: 16px;
   padding: 16px;
+  min-width: 0;
 }
 
 .replay-action-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.replay-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.replay-header-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.replay-heading {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 .replay-input-row {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .target-url-input {
   flex: 1;
-  padding: 7px 12px;
+  min-width: 220px;
+  height: 36px;
+  padding: 6px 12px;
   font-size: 13px;
 }
 
 .method-select {
-  padding: 7px 10px;
-  background: var(--bg-sidebar);
+  height: 36px;
+  padding: 6px 10px;
+  background: var(--bg-raised);
   color: var(--text-primary);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
   font-weight: 600;
   cursor: pointer;
+}
+
+.btn-active {
+  background: var(--accent-subtle);
+  color: var(--accent);
+  border-color: var(--accent-border);
 }
 
 .target-url-presets {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 10px;
   flex-wrap: wrap;
 }
 
@@ -47,43 +82,35 @@
   color: var(--text-muted);
 }
 
-.preset-pill {
-  background: var(--bg-sidebar);
-  border: 1px solid var(--border-subtle);
+.preset-chip {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  color: #38bdf8;
+  color: var(--text-secondary);
   font-size: 11px;
-  padding: 2px 8px;
+  padding: 3px 8px;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
-.preset-pill:hover {
+.preset-chip:hover {
   background: var(--bg-hover);
-  border-color: #38bdf8;
-  color: #ffffff;
-}
-
-.btn-active {
-  background: var(--accent-subtle);
-  color: var(--accent-primary);
-  border-color: var(--accent-border);
+  border-color: var(--accent);
+  color: var(--text-primary);
 }
 
 .replay-error-banner {
-  margin-top: 10px;
   padding: 8px 12px;
   background: var(--danger-subtle);
-  color: var(--danger-color);
+  color: var(--danger);
   border: 1px solid var(--danger-border);
   border-radius: var(--radius-md);
   font-size: 12px;
 }
 
 .edit-replay-panel {
-  margin-top: 14px;
   padding-top: 14px;
-  border-top: 1px solid var(--border-subtle);
+  border-top: 1px solid var(--border);
 }
 
 .editor-columns {
@@ -96,9 +123,6 @@
   .editor-columns {
     grid-template-columns: 1fr;
   }
-  .replay-input-row {
-    flex-wrap: wrap;
-  }
 }
 
 .editor-group {
@@ -107,23 +131,23 @@
   gap: 6px;
 }
 
-.editor-header {
+.editor-label {
   font-size: 11px;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: var(--text-muted);
 }
 
 .code-textarea {
   resize: vertical;
-  line-height: 1.4;
+  line-height: 1.45;
   font-size: 12px;
   background: var(--bg-app);
 }
 
 /* Result Card */
 .replay-result-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   overflow: hidden;
 }
@@ -133,8 +157,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 14px;
-  background: var(--bg-sidebar);
-  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-raised);
+  border-bottom: 1px solid var(--border);
   font-size: 12px;
 }
 
@@ -143,6 +167,7 @@
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+  min-width: 0;
 }
 
 .result-title {
@@ -150,40 +175,15 @@
   color: var(--text-primary);
 }
 
-.badge-status {
-  padding: 2px 6px;
-  border-radius: var(--radius-sm);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.status-success {
-  background: var(--success-subtle);
-  color: var(--success-color);
-  border: 1px solid var(--success-border);
-}
-
-.status-error {
-  background: var(--danger-subtle);
-  color: var(--danger-color);
-  border: 1px solid var(--danger-border);
-}
-
-.status-warning {
-  background: var(--warning-subtle);
-  color: var(--warning-color);
-  border: 1px solid var(--warning-border);
-}
-
 .latency-badge {
-  color: var(--text-secondary);
+  color: var(--text-muted);
   font-size: 11px;
 }
 
 .target-url-tag {
   color: var(--text-muted);
   font-size: 11px;
+  max-width: 280px;
 }
 
 .time-tag {
@@ -194,7 +194,7 @@
 .replay-error-msg {
   padding: 10px 14px;
   background: var(--danger-subtle);
-  color: var(--danger-color);
+  color: var(--danger);
   font-size: 12px;
 }
 
@@ -208,7 +208,7 @@
 .result-pre {
   margin: 0;
   font-size: 12px;
-  line-height: 1.45;
+  line-height: 1.5;
   white-space: pre-wrap;
   word-break: break-all;
   color: var(--text-primary);
@@ -216,23 +216,23 @@
 
 /* History Section */
 .replay-history-section {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 14px;
+  padding: 16px;
 }
 
 .history-header {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .history-empty {
   font-size: 12px;
   color: var(--text-muted);
-  padding: 12px 0;
+  padding: 16px 0;
   text-align: center;
 }
 
@@ -248,7 +248,8 @@
   padding: 6px 10px;
   font-size: 11px;
   color: var(--text-muted);
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
 }
 
 .history-row {
@@ -267,19 +268,13 @@
 }
 
 .row-selected {
-  background: var(--bg-active);
+  background: var(--bg-raised);
 }
 
 .col-lat {
-  color: var(--text-secondary);
+  color: var(--text-muted);
 }
 
 .col-time {
   color: var(--text-muted);
-}
-
-.truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }

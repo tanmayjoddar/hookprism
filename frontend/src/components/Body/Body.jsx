@@ -3,7 +3,6 @@ import "./Body.css";
 
 function syntaxHighlightJson(jsonStr) {
   if (!jsonStr) return "";
-  // Escape HTML characters
   const escaped = jsonStr
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -37,9 +36,10 @@ const Body = ({ body }) => {
     let rawStr = "";
     let prettyStr = "";
     let isJson = false;
+    let byteCount = 0;
 
     if (body === undefined || body === null) {
-      return { rawStr: "(Empty body)", prettyStr: "(Empty body)", isJson: false };
+      return { rawStr: "(Empty body)", prettyStr: "(Empty body)", isJson: false, byteCount: 0 };
     }
 
     if (typeof body === "object") {
@@ -60,14 +60,15 @@ const Body = ({ body }) => {
       prettyStr = String(body);
     }
 
-    return { rawStr, prettyStr, isJson };
+    byteCount = new Blob([rawStr]).size;
+    return { rawStr, prettyStr, isJson, byteCount };
   }, [body]);
 
   const copyToClipboard = () => {
     const text = viewMode === "pretty" ? formattedStrings.prettyStr : formattedStrings.rawStr;
     navigator.clipboard.writeText(text);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setTimeout(() => setCopied(false), 1500);
   };
 
   const highlightedHtml = useMemo(() => {
@@ -80,25 +81,31 @@ const Body = ({ body }) => {
   return (
     <div className="body-panel">
       <div className="body-toolbar">
-        <div className="view-mode-tabs">
-          <button
-            type="button"
-            className={`btn-mode ${viewMode === "pretty" ? "mode-active" : ""}`}
-            onClick={() => setViewMode("pretty")}
-          >
-            PRETTY JSON
-          </button>
-          <button
-            type="button"
-            className={`btn-mode ${viewMode === "raw" ? "mode-active" : ""}`}
-            onClick={() => setViewMode("raw")}
-          >
-            RAW
-          </button>
+        <div className="body-toolbar-left">
+          <div className="view-mode-tabs" role="group" aria-label="Payload view mode">
+            <button
+              type="button"
+              className={`btn-mode ${viewMode === "pretty" ? "mode-active" : ""}`}
+              onClick={() => setViewMode("pretty")}
+            >
+              Pretty
+            </button>
+            <button
+              type="button"
+              className={`btn-mode ${viewMode === "raw" ? "mode-active" : ""}`}
+              onClick={() => setViewMode("raw")}
+            >
+              Raw
+            </button>
+          </div>
+
+          <span className="body-bytes-badge mono">
+            {formattedStrings.byteCount} bytes
+          </span>
         </div>
 
-        <button className="btn btn-sm" onClick={copyToClipboard}>
-          {copied ? "Copied!" : "Copy Payload"}
+        <button type="button" className="btn btn-sm" onClick={copyToClipboard}>
+          {copied ? "Copied" : "Copy body"}
         </button>
       </div>
 

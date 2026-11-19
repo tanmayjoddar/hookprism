@@ -14,7 +14,7 @@ function generateCurlCommand(request) {
 
   const headers = request.payload?.headers || {};
   for (const [key, val] of Object.entries(headers)) {
-    if (["host", "content-length"].includes(key.toLowerCase())) continue;
+    if (["host", "content-length", "connection"].includes(key.toLowerCase())) continue;
     cmd += ` \\\n  -H "${key}: ${val}"`;
   }
 
@@ -52,7 +52,7 @@ const RequestDetails = ({ request, onDelete }) => {
     const cmd = generateCurlCommand(request);
     navigator.clipboard.writeText(cmd);
     setCopiedCurl(true);
-    setTimeout(() => setCopiedCurl(false), 2000);
+    setTimeout(() => setCopiedCurl(false), 1500);
   };
 
   return (
@@ -61,9 +61,13 @@ const RequestDetails = ({ request, onDelete }) => {
       <div className="request-header-bar">
         <div className="req-header-left">
           <span className={`badge-method ${methodClass}`}>{method}</span>
-          <span className="req-path mono truncate">{request.payload?.path}</span>
+          <span className="req-path mono truncate" title={request.payload?.path}>
+            {request.payload?.path}
+          </span>
           {request.payload?.ip && (
-            <span className="req-ip-tag mono">{request.payload.ip}</span>
+            <span className="req-ip-tag mono" title="Client IP address">
+              {request.payload.ip}
+            </span>
           )}
           <span className="req-time-tag mono">
             {helpers.formatRelativeTime(request.date || request.received_at)}
@@ -71,11 +75,12 @@ const RequestDetails = ({ request, onDelete }) => {
         </div>
 
         <div className="req-header-right">
-          <button className="btn btn-sm" onClick={handleCopyCurl}>
-            {copiedCurl ? "Copied cURL!" : "Copy as cURL"}
+          <button type="button" className="btn btn-sm" onClick={handleCopyCurl}>
+            {copiedCurl ? "Copied" : "Copy as cURL"}
           </button>
           {onDelete && (
             <button
+              type="button"
               className="btn btn-sm btn-danger"
               onClick={() => onDelete(request.id)}
               title="Delete this request"
@@ -86,37 +91,64 @@ const RequestDetails = ({ request, onDelete }) => {
         </div>
       </div>
 
-      {/* Tabs navigation */}
-      <div className="request-tabs-bar">
+      {/* Tabs navigation: Plain English first, tech tag in tooltip */}
+      <div className="request-tabs-bar" role="tablist">
         <button
+          type="button"
+          role="tab"
+          aria-selected={activeTab === "body"}
           className={`tab-btn ${activeTab === "body" ? "tab-active" : ""}`}
           onClick={() => setActiveTab("body")}
+          title="Payload body viewer"
         >
           Body
         </button>
+
         <button
+          type="button"
+          role="tab"
+          aria-selected={activeTab === "headers"}
           className={`tab-btn ${activeTab === "headers" ? "tab-active" : ""}`}
           onClick={() => setActiveTab("headers")}
+          title="HTTP Headers"
         >
           Headers ({Object.keys(request.payload?.headers || {}).length})
         </button>
+
         <button
+          type="button"
+          role="tab"
+          aria-selected={activeTab === "replay"}
           className={`tab-btn ${activeTab === "replay" ? "tab-active" : ""}`}
           onClick={() => setActiveTab("replay")}
+          title="Replay — resend to any URL"
         >
-          Replay
+          <span>Resend</span>
+          <span className="tab-tech-tag mono">Replay</span>
         </button>
+
         <button
+          type="button"
+          role="tab"
+          aria-selected={activeTab === "diff"}
           className={`tab-btn ${activeTab === "diff" ? "tab-active" : ""}`}
           onClick={() => setActiveTab("diff")}
+          title="Dual-target diff — compare two servers"
         >
-          Dual Diff
+          <span>Compare</span>
+          <span className="tab-tech-tag mono">Diff</span>
         </button>
+
         <button
+          type="button"
+          role="tab"
+          aria-selected={activeTab === "signature"}
           className={`tab-btn ${activeTab === "signature" ? "tab-active" : ""}`}
           onClick={() => setActiveTab("signature")}
+          title="HMAC-SHA256 — verify webhook signature"
         >
-          Signatures
+          <span>Verify</span>
+          <span className="tab-tech-tag mono">HMAC</span>
         </button>
       </div>
 

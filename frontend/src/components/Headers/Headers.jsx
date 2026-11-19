@@ -3,37 +3,42 @@ import "./Headers.css";
 
 const Headers = ({ obj }) => {
   const [filter, setFilter] = useState("");
-  const [copied, setCopied] = useState(false);
+  const [copiedAll, setCopiedAll] = useState(false);
+  const [copiedKey, setCopiedKey] = useState(null);
 
   const entries = Object.entries(obj || {});
-  const filtered = entries.filter(([k, v]) =>
-    k.toLowerCase().includes(filter.toLowerCase()) ||
-    String(v).toLowerCase().includes(filter.toLowerCase())
+  const filtered = entries.filter(
+    ([k, v]) =>
+      k.toLowerCase().includes(filter.toLowerCase()) ||
+      String(v).toLowerCase().includes(filter.toLowerCase())
   );
 
   const copyAll = () => {
     const text = entries.map(([k, v]) => `${k}: ${v}`).join("\n");
     navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setCopiedAll(true);
+    setTimeout(() => setCopiedAll(false), 1500);
   };
 
   const copySingle = (k, v) => {
     navigator.clipboard.writeText(`${k}: ${v}`);
+    setCopiedKey(k);
+    setTimeout(() => setCopiedKey(null), 1500);
   };
 
   return (
     <div className="headers-panel">
       <div className="headers-toolbar">
         <input
-          type="text"
+          type="search"
           className="headers-search-input mono"
           placeholder="Filter headers by key or value..."
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
+          aria-label="Filter headers"
         />
-        <button className="btn btn-sm" onClick={copyAll}>
-          {copied ? "Copied!" : "Copy All Headers"}
+        <button type="button" className="btn btn-sm" onClick={copyAll}>
+          {copiedAll ? "Copied" : "Copy all"}
         </button>
       </div>
 
@@ -54,7 +59,9 @@ const Headers = ({ obj }) => {
                 title="Click to copy this header"
               >
                 <span className="hkey-cell">{k}</span>
-                <span className="hval-cell truncate">{String(v)}</span>
+                <span className="hval-cell truncate">
+                  {copiedKey === k ? "Copied to clipboard!" : String(v)}
+                </span>
               </div>
             ))
           )}
