@@ -1,0 +1,81 @@
+.body-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.body-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.view-mode-tabs {
+  display: flex;
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 2px;
+  gap: 2px;
+}
+
+.btn-mode {
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.btn-mode:hover {
+  color: var(--text-primary);
+}
+
+.mode-active {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.body-content-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.body-pre {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: var(--text-primary);
+}
+
+/* JSON Syntax Highlighting Colors */
+.json-key {
+  color: #60a5fa; /* Light blue */
+}
+
+.json-string {
+  color: #34d399; /* Emerald */
+}
+
+.json-number {
+  color: #fbbf24; /* Amber */
+}
+
+.json-boolean {
+  color: #c084fc; /* Purple */
+}
+
+.json-null {
+  color: #f87171; /* Red */
+}
