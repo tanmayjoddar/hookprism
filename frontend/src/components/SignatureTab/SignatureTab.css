@@ -1,0 +1,176 @@
+.sig-tab-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.sig-header-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+}
+
+.sig-detected-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+
+.sig-detect-label {
+  color: var(--text-muted);
+}
+
+.sig-tag {
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+}
+
+.sig-tag-gh {
+  background: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.sig-tag-stripe {
+  background: rgba(168, 85, 247, 0.12);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+}
+
+.sig-tag-none {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.sig-form-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+}
+
+.sig-inputs-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+@media (max-width: 640px) {
+  .sig-inputs-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.sig-select {
+  padding: 7px 10px;
+  background: var(--bg-sidebar);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-size: 12px;
+}
+
+.sig-secret-input {
+  flex: 1;
+  padding: 7px 12px;
+}
+
+.sig-error-banner {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--danger-subtle);
+  color: var(--danger-color);
+  border: 1px solid var(--danger-border);
+  border-radius: var(--radius-md);
+  font-size: 12px;
+}
+
+.sig-result-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sig-result-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sig-status-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sig-badge {
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+}
+
+.sig-badge-valid {
+  background: var(--success-subtle);
+  color: var(--success-color);
+  border: 1px solid var(--success-border);
+}
+
+.sig-badge-invalid {
+  background: var(--danger-subtle);
+  color: var(--danger-color);
+  border: 1px solid var(--danger-border);
+}
+
+.sig-algo {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.sig-reason-box {
+  padding: 8px 12px;
+  background: var(--danger-subtle);
+  color: var(--danger-color);
+  border-radius: var(--radius-md);
+  font-size: 12px;
+}
+
+.sig-details-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--bg-app);
+  padding: 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.sig-detail-item {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  font-size: 12px;
+}
+
+.detail-label {
+  color: var(--text-muted);
+}
+
+.detail-val {
+  color: var(--text-primary);
+}
+
+.code-break {
+  word-break: break-all;
+}
