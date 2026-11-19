@@ -43,7 +43,7 @@ A modern, high-performance developer platform to capture, inspect, verify, chaos
 
 ## Architecture & Hosting
 
-- **Frontend**: Cloudflare Pages / Workers (`https://origin-splat.tanmayjoddar.workers.dev`).
+- **Frontend**: Cloudflare Pages / Workers (`https://hookprism.tanmayjoddar.workers.dev`).
 - **Database**: Serverless PostgreSQL on [Neon](https://neon.tech).
 - **Backend**: Node.js & Express on [Render](https://render.com).
 
