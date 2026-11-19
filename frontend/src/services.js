@@ -1,10 +1,7 @@
 import axios from "axios";
 
 export const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  (typeof window !== "undefined" && window.location.hostname === "localhost"
-    ? "http://localhost:3000"
-    : "");
+  import.meta.env.VITE_API_URL || "https://hookprism.onrender.com";
 
 const BINS_URL = `${API_BASE_URL}/api/bins`;
 const REQUESTS_URL = `${API_BASE_URL}/api/requests`;
